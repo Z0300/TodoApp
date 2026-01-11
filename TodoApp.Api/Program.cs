@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AppDbContext>(opts =>
 {
-    opts.UseNpgsql(builder.Configuration.GetConnectionString("Default"));
+    opts.UseNpgsql(builder.Configuration.GetConnectionString("Database"));
 });
 
 builder.Services.AddOpenApi();
