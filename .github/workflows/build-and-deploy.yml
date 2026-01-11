@@ -10,7 +10,7 @@ env:
   AZURE_WEBAPP_NAME: td-service
   AZURE_WEBAPP_PACKAGE_PATH: "./TodoApp.Api/publish"
   DOTNET_VERSION: "10.x"
-  SOLUTION_PATH: "TodoApp.Api.sln"
+  SOLUTION_PATH: "TodoApp.Api.slnx"
   API_PROJECT_PATH: "TodoApp.Api"
   PUBLISH_DIR: "./publish"
 
