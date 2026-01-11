@@ -45,6 +45,32 @@ jobs:
           name: webapp
           path: ${{ env.PUBLISH_DIR }}
 
+  apply-migrations:
+    name: Apply Database Migrations
+    runs-on: ubuntu-24.04
+    needs: build-and-test
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Install EF Core CLI
+        run: |
+          dotnet tool install -g dotnet-ef
+          dotnet tool restore
+
+      - name: Create migration bundles
+        run: |
+          dotnet ef migrations bundle --project TodoApp.Api --context AppDbContext --output app-bundle
+
+      - name: Apply app migrations
+        run: ./app-bundle --connection "${{ secrets.DATABASE_CONNECTION_STRING }}"
+
   deploy:
     name: Deploy to Azure
     runs-on: ubuntu-latest
