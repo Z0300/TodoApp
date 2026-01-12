@@ -22,6 +22,9 @@ if (app.Environment.IsDevelopment())
 app.MapGet("/todos", async (AppDbContext db) => 
     await db.TodoItems.AsNoTracking().ToListAsync());
 
+app.MapGet("/todos/{id:guid}", async (Guid id, AppDbContext db) =>
+    await db.TodoItems.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id));
+
 app.MapPost("/todos", async (AppDbContext db, TodoItem input) =>
 {
     var todo = new TodoItem { Title = input.Title };
