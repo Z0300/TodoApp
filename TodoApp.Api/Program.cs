@@ -22,12 +22,18 @@ if (app.Environment.IsDevelopment())
 app.MapGet("/todos", async (AppDbContext db) => 
     await db.TodoItems.AsNoTracking().ToListAsync());
 
+app.MapGet("/todos/completed", async (AppDbContext db) =>
+    await db.TodoItems
+        .Where(x => x.IsCompleted == true)
+        .AsNoTracking()
+        .ToListAsync());
+
 app.MapGet("/todos/{id:guid}", async (Guid id, AppDbContext db) =>
     await db.TodoItems.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id));
 
 app.MapPost("/todos", async (AppDbContext db, TodoItem input) =>
 {
-    var todo = new TodoItem { Title = input.Title };
+    var todo = new TodoItem { Title = input.Title, Description =  input.Description};
     db.TodoItems.Add(todo);
     await db.SaveChangesAsync();
     return Results.Created($"/todos/{todo.Id}", todo);
