@@ -12,7 +12,7 @@ using TodoApp.Api;
 namespace TodoApp.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260111112600_CreateDb")]
+    [Migration("20260114073016_CreateDb")]
     partial class CreateDb
     {
         /// <inheritdoc />
@@ -34,6 +34,11 @@ namespace TodoApp.Api.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)");
+
                     b.Property<bool>("IsCompleted")
                         .HasColumnType("boolean");
 
@@ -43,6 +48,8 @@ namespace TodoApp.Api.Migrations
                         .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IsCompleted");
 
                     b.ToTable("TodoItems");
                 });

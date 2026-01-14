@@ -17,6 +17,7 @@ namespace TodoApp.Api.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Title = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: false),
                     IsCompleted = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
@@ -24,6 +25,11 @@ namespace TodoApp.Api.Migrations
                 {
                     table.PrimaryKey("PK_TodoItems", x => x.Id);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TodoItems_IsCompleted",
+                table: "TodoItems",
+                column: "IsCompleted");
         }
 
         /// <inheritdoc />

@@ -9,8 +9,19 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+        modelBuilder.Entity<TodoItem>(builder =>
+        {
+            builder.HasKey(x => x.Id);
 
-        base.OnModelCreating(modelBuilder);
+            builder.Property(x => x.Title)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            builder.Property(x => x.Description)
+               .IsRequired()
+               .HasMaxLength(512);
+
+            builder.HasIndex(x => x.IsCompleted);
+        });
     }
 }

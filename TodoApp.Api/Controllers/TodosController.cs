@@ -4,9 +4,9 @@ using TodoApp.Api.Models;
 
 namespace TodoApp.Api.Controllers;
 
-[Route("api/todos")]
 [ApiController]
-public class TodosController(AppDbContext context) : ControllerBase
+[Route("api/todos")]
+public sealed class TodosController(AppDbContext context) : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<PaginatedResponse<TodoItem>>> GetTodos(
