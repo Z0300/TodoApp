@@ -31,7 +31,7 @@ jobs:
         run: dotnet restore ${{ env.SOLUTION_PATH }}
 
       - name: Build
-        run: dotnet build DevHabit.slnx -c Release --no-restore --nologo
+        run: dotnet build ${{ env.SOLUTION_PATH }} -c Release --no-restore --nologo
 
       - name: Test
         run: dotnet test ${{ env.SOLUTION_PATH }} --configuration Release --no-build --nologo --verbosity quiet
