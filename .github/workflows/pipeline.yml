@@ -7,12 +7,12 @@ on:
       - master
 
 env:
-  AZURE_WEBAPP_NAME: td-service
-  AZURE_WEBAPP_PACKAGE_PATH: "./TodoApp.Api/publish"
+  AZURE_WEBAPP_NAME: "td-service"
+  #AZURE_WEBAPP_PACKAGE_PATH: "./TodoApp.Api/publish"
   DOTNET_VERSION: "10.x"
-  SOLUTION_PATH: "TodoApp.slnx"
-  API_PROJECT_PATH: "TodoApp.Api"
-  PUBLISH_DIR: "./publish"
+  #SOLUTION_PATH: "TodoApp.slnx"
+  #API_PROJECT_PATH: "TodoApp.Api"
+  #PUBLISH_DIR: "./publish"
 
 jobs:
   build-and-test:
@@ -28,22 +28,22 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Restore
-        run: dotnet restore ${{ env.SOLUTION_PATH }}
+        run: dotnet restore TodoApp.slnx
 
       - name: Build
-        run: dotnet build ${{ env.SOLUTION_PATH }} -c Release --no-restore --nologo
+        run: dotnet build TodoApp.slnx -c Release --no-restore --nologo
 
       - name: Test
-        run: dotnet test ${{ env.SOLUTION_PATH }} --configuration Release --no-build --nologo --verbosity quiet
+        run: dotnet test TodoApp.slnx -c Release --no-restore --no-build --nologo --verbosity quiet
 
       - name: Publish
-        run: dotnet publish ${{ env.API_PROJECT_PATH }} -c Release --no-restore --nologo -p:PublishDir=${{ env.PUBLISH_DIR }} -p:DebugType=None -p:DebugSymbols=false
+        run: dotnet publish TodoApp.Api -c Release --no-restore --no-build --nologo -p:PublishDir=publish -p:DebugType=None -p:DebugSymbols=false
 
       - name: Publish Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: webapp
-          path: ${{ env.PUBLISH_DIR }}
+          path: TodoApp.Api/publish
 
   apply-migrations:
     name: Apply Database Migrations
@@ -58,9 +58,6 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
-
-      - name: Restore
-        run: dotnet restore ${{ env.SOLUTION_PATH }}
 
       - name: Install EF Core CLI
         run: |
