@@ -49,6 +49,8 @@ jobs:
     name: Apply Database Migrations
     runs-on: ubuntu-24.04
     needs: build-and-test
+    env:
+      DATABASE_CONNECTION_STRING: ${{ secrets.DATABASE_CONNECTION_STRING }}
 
     steps:
       - name: Checkout
@@ -67,12 +69,17 @@ jobs:
           dotnet tool install -g dotnet-ef
           dotnet tool restore
 
+      - name: Debug env
+        run: echo "DATABASE_CONNECTION_STRING"
+
       - name: Create migration bundles
-        run: |
-          dotnet ef migrations bundle --project TodoApp.Api --context AppDbContext --output app-bundle
+        run: dotnet ef migrations bundle \
+          --project TodoApp.Api \
+          --context AppDbContext \
+          --output app-bundle
 
       - name: Apply app migrations
-        run: ./app-bundle --connection "${{ secrets.DATABASE_CONNECTION_STRING }}"
+        run: ./app-bundle
 
   deploy:
     name: Deploy to Azure
