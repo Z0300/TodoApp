@@ -11,7 +11,8 @@ public sealed class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbConte
 
         var connectionString =
           Environment.GetEnvironmentVariable("DATABASE_CONNECTION_STRING")
-            ?? throw new ApplicationException("No connection string found");
+              ?? throw new InvalidOperationException(
+                        "DATABASE_CONNECTION_STRING is not set");
 
         optionsBuilder.UseNpgsql(connectionString);
 
