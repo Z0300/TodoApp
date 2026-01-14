@@ -9,7 +9,7 @@ namespace TodoApp.Api.Controllers;
 public sealed class TodosController(AppDbContext context) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<PaginatedResponse<TodoItem>>> GetTodos(
+    public async Task<IActionResult> GetTodos(
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10,
         CancellationToken cancellationToken = default)
@@ -49,7 +49,7 @@ public sealed class TodosController(AppDbContext context) : ControllerBase
     }
 
     [HttpGet("completed")]
-    public async Task<ActionResult<PaginatedResponse<TodoItem>>> GetCompletedTodos(
+    public async Task<IActionResult> GetCompletedTodos(
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10,
         CancellationToken cancellationToken = default)
