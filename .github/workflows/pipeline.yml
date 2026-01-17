@@ -77,10 +77,11 @@ jobs:
           ConnectionStrings__DefaultConnection: ${{ secrets.DATABASE_CONNECTION_STRING }}
         run: |
           dotnet ef database update \
-          --project TodoApp.Api \
-          --startup-project TodoApp.Api \
-          --context AppDbContext \
-          --no-build
+            --project TodoApp.Api \
+            --startup-project TodoApp.Api \
+            --context AppDbContext \
+            --configuration Release \
+            --no-build
 
   deploy:
     name: Deploy to Azure
