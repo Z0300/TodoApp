@@ -71,7 +71,7 @@ app.MapGet("/api/todos/completed", async (
     try
     {
         int skip = (pageNumber - 1) * pageSize;
-        int totalCount = await context.TodoItems.CountAsync(cancellationToken);
+        int totalCount = await context.TodoItems.CountAsync(x => x.IsCompleted == true, cancellationToken);
         var todos = await context.TodoItems
             .Where(x => x.IsCompleted)
             .AsNoTracking()
@@ -102,6 +102,20 @@ app.MapGet("/api/todos/completed", async (
     }
 });
 
+app.MapGet("/api/todos/count", async (
+    AppDbContext context,
+
+    CancellationToken cancellationToken = default) =>
+{
+    int totalCount = await context.TodoItems.CountAsync(cancellationToken);
+    int totalCompletedCount = await context.TodoItems.CountAsync(x => x.IsCompleted == true, cancellationToken);
+
+    return Results.Ok(new TotalCountResponse
+    {
+        AllTodosCount = totalCount,
+        CompletedTodosCount = totalCompletedCount,
+    });
+});
 
 app.MapGet("/api/todos/{id:guid}", async (
     Guid id,
