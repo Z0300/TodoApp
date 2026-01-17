@@ -72,12 +72,17 @@ jobs:
           dotnet tool install -g dotnet-ef
           dotnet tool restore
 
-      - name: Create migration bundles
-        run: |
-          dotnet ef migrations bundle --project TodoApp.Api --context AppDbContext --output app-bundle
+      # - name: Create migration bundles
+      #   run: |
+      #     dotnet ef migrations bundle --project TodoApp.Api --context AppDbContext --output app-bundle
 
-      - name: Apply app migrations
-        run: ./app-bundle --connection "${{ secrets.DATABASE_CONNECTION_STRING }}"
+      - name: Apply migrations
+        env:
+          ConnectionStrings__DefaultConnection: ${{ secrets.DATABASE_CONNECTION_STRING }}
+        run: |
+          dotnet ef database update \
+            --project TodoApp.Api \
+            --context AppDbContext
 
   deploy:
     name: Deploy to Azure
