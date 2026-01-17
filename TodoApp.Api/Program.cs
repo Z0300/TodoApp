@@ -102,6 +102,20 @@ app.MapGet("/api/todos/completed", async (
     }
 });
 
+app.MapGet("/api/todos/count", async (
+    AppDbContext context,
+
+    CancellationToken cancellationToken = default) =>
+{
+    int totalCount = await context.TodoItems.CountAsync(cancellationToken);
+    int totalCompletedCount = await context.TodoItems.CountAsync(x => x.IsCompleted == true, cancellationToken);
+
+    return Results.Ok(new TotalCountResponse
+    {
+        AllTodosCount = totalCount,
+        CompletedTodosCount = totalCompletedCount,
+    });
+});
 
 app.MapGet("/api/todos/{id:guid}", async (
     Guid id,
